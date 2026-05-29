@@ -1,18 +1,12 @@
-"use client"
 import EventCard from '@/components/EventCard'
 import ExploreBtn from '@/components/ExploreBtn'
 import { events } from '@/lib/constants'
-import React, { useEffect } from 'react'
-import posthog from 'posthog-js'
+import React from 'react'
 
-const Page = ()=>{
-  useEffect(() => {
-    posthog.capture("featured_events_viewed", { event_count: events.length })
-  }, [])
-
+const page = ()=>{
   return (
     <section>
-      <h1 className="text-center">The Hub for Every Dev <br/> Event You Can&apos;t Miss</h1>
+      <h1 className="text-center">The Hub for Every Dev <br/> Event You Can't Miss</h1>
       <p className="text-center mt-5">Hackathons,Meetups and Conference, All in One Place</p>
 
       <ExploreBtn/>
@@ -34,4 +28,4 @@ const Page = ()=>{
   )
 }
 
-export default Page
+export default page
