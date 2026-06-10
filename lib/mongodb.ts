@@ -33,6 +33,11 @@ async function connectDB(): Promise<typeof mongoose> {
     return cached.conn;
   }
 
+  //another option to check connection if already connected
+  // if (mongoose.connection.readyState >= 1) {
+  //   return  // ← already connected, skip
+  // }
+
   // Return existing connection promise if one is in progress
   if (!cached.promise) {
     // Validate MongoDB URI exists
