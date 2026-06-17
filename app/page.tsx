@@ -1,14 +1,21 @@
-"use client"
 import EventCard from '@/components/EventCard'
 import ExploreBtn from '@/components/ExploreBtn'
-import { events } from '@/lib/constants'
-import React, { useEffect } from 'react'
-import posthog from 'posthog-js'
+// import { useEffect } from 'react'
+// import posthog from 'posthog-js'
+import { IEvent } from '@/database/event.model'
+import { cacheLife } from 'next/cache';
 
-const Page = ()=>{
-  useEffect(() => {
-    posthog.capture("featured_events_viewed", { event_count: events.length })
-  }, [])
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const Page = async ()=>{
+  "use cache";
+  cacheLife('hours')
+  const response = await fetch(`${BASE_URL}/api/events`);
+  const {events} = await response.json()
+
+
+  // useEffect(() => {
+  //   posthog.capture("featured_events_viewed", { event_count: events.length })
+  // }, [])
 
   return (
     <section>
@@ -21,7 +28,7 @@ const Page = ()=>{
         <h3>Feature Events</h3>
         <ul className="events">
           {
-          events.map((event)=>(
+          events && events.length > 0 && events.map((event: IEvent)=>(
             <li key={event.title}>
               <EventCard {...event}/>
             </li>
