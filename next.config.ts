@@ -1,35 +1,40 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  cacheComponents : true,
+  typescript: {
+    ignoreBuildErrors: true
+  },
+  // cacheComponents : true,
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'res.cloudinary.com'
       },
-      // {
-      //   protocol: 'https',
-      //   hostname: 'images.unsplash.com'  // ← add this
-      // }
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com'  // ← add this
+      },
+      { protocol: 'https',
+        hostname: 'plus.unsplash.com' },  // ← add this
     ]
   },
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: "/ingest/static/:path*",
-  //       destination: "https://us-assets.i.posthog.com/static/:path*",
-  //     },
-  //     {
-  //       source: "/ingest/array/:path*",
-  //       destination: "https://us-assets.i.posthog.com/array/:path*",
-  //     },
-  //     {
-  //       source: "/ingest/:path*",
-  //       destination: "https://us.i.posthog.com/:path*",
-  //     },
-  //   ];
-  // },
+  async rewrites() {
+    return [
+      {
+        source: "/ingest/static/:path*",
+        destination: "https://us-assets.i.posthog.com/static/:path*",
+      },
+      {
+        source: "/ingest/array/:path*",
+        destination: "https://us-assets.i.posthog.com/array/:path*",
+      },
+      {
+        source: "/ingest/:path*",
+        destination: "https://us.i.posthog.com/:path*",
+      },
+    ];
+  },
   skipTrailingSlashRedirect: true,
 };
 

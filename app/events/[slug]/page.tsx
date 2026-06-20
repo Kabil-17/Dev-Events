@@ -4,6 +4,7 @@ import BookEvent from "@/components/BookEvent";
 import { getSimilarEventsBySlug } from "@/lib/actions/event.actions";
 import { IEvent } from '@/database/event.model'
 import EventCard from "@/components/EventCard";
+import { cacheLife } from "next/cache";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
@@ -34,6 +35,8 @@ const EventTags = ({tags}:{tags:string[]})=>(
 )
 
 const EventDetailsPage = async ({params}:{params:Promise<{slug: string}>})=> {
+    // "use cache"
+    // cacheLife('hours')
 
     const {slug} = await params;
     let event;
@@ -66,6 +69,8 @@ const EventDetailsPage = async ({params}:{params:Promise<{slug: string}>})=> {
     const bookings = 10;
 
     const similarEvents : IEvent[] = await getSimilarEventsBySlug(slug);
+
+    // console.log({similarEvents})
   return (
     <section id="event">
         <div className="header">
@@ -92,14 +97,14 @@ const EventDetailsPage = async ({params}:{params:Promise<{slug: string}>})=> {
                 <EventDeatilItem icon="../icons/audience.svg" alt="audience" label={audience}/>
             </section>
 
-            <EventAgenda agendaItems={JSON.parse(agenda[0])}/>
+            <EventAgenda agendaItems={agenda}/>
 
             <section className="flex-col-gap-2">
                 <h2>About the Organizer</h2>
                 <p>{organizer}</p>
             </section>
 
-            <EventTags tags={JSON.parse(tags[0])}/>
+            <EventTags tags={tags}/>
             </div>
 
             {/* right side - booking form */}
@@ -112,7 +117,7 @@ const EventDetailsPage = async ({params}:{params:Promise<{slug: string}>})=> {
                         <p className="text-sm">Be the first person to book your spot!</p>
                     )}
 
-                    <BookEvent/>
+                    <BookEvent eventId={event._id} slug={slug}/>
                 </div>
             </aside>
         </div>
