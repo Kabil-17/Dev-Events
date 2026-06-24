@@ -5,12 +5,18 @@ import ExploreBtn from '@/components/ExploreBtn'
 import { IEvent } from '@/database/event.model'
 // import { cacheLife } from 'next/cache';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-const Page = async ()=>{
-  // "use cache";
-  // cacheLife('hours')
-  const response = await fetch(`${BASE_URL}/api/events`);
-  const {events} = await response.json()
+
+import { Event } from "@/database";
+import connectDB from "@/lib/mongodb";
+
+const Page = async () => {
+  await connectDB();
+  const rawEvents = await Event.find().sort({ createdAt: -1 }).lean();
+
+  const events = rawEvents.map(e=>({
+    ...e,
+    _id: e._id.toString()
+  }))
 
 
   // useEffect(() => {
